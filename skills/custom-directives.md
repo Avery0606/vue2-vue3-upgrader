@@ -124,3 +124,73 @@ app.directive('color', {
   }
 })
 ```
+
+## 迁移规则4：移除 binding.expression
+
+- Vue2: binding 对象包含 expression 属性，包含指令的表达式字符串
+- Vue3: binding 对象不再包含 expression 属性
+
+### 代码示例
+
+```javascript
+// Vue2 写法
+Vue.directive('my-directive', {
+  bind(el, binding) {
+    console.log(binding.expression)
+  }
+})
+
+// Vue3 写法
+app.directive('my-directive', {
+  mounted(el, binding) {
+    // binding 对象中不再包含 expression 属性
+  }
+})
+```
+
+## 迁移规则5：多根组件中自定义指令行为
+
+- Vue2: 单根组件，自定义指令正常工作
+- Vue3: 多根组件上自定义指令将被忽略并抛出警告
+
+### 代码示例
+
+```vue
+<!-- Vue2 写法 -->
+<template>
+  <div>
+    <!-- 单根组件 -->
+  </div>
+</template>
+
+<script>
+export default {
+  directives: {
+    focus: {
+      inserted: el => el.focus()
+    }
+  }
+}
+</script>
+
+<!-- Vue3 写法 -->
+<template>
+  <!-- 多根组件 -->
+  <div v-if="condition">...</div>
+  <div v-else>...</div>
+</template>
+
+<script>
+export default {
+  directives: {
+    focus: {
+      mounted: el => el.focus()
+    }
+  },
+  mounted() {
+    // 避免在多根组件上使用自定义指令
+    // 如果必须使用，确保组件只有一个根节点
+  }
+}
+</script>
+```

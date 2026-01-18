@@ -78,3 +78,40 @@ export default {
 }
 </script>
 ```
+
+## 迁移规则4：无法匹配的特殊字符
+
+- Vue2: 可以尝试使用 config.keyCodes
+- Vue3: 某些特定字符无法被匹配，应该在监听器内使用 event.key 代替
+
+### 代码示例
+
+```html
+<!-- Vue2/3（不推荐） -->
+<!-- 以下字符无法被匹配："、'、/、=、> 和 . -->
+<input v-on:keypress.="dotPress">
+
+<!-- Vue3（推荐）-->
+<input v-on:keypress="handleKeyPress">
+<script>
+export default {
+  methods: {
+    handleKeyPress(event) {
+      if (event.key === '.') {
+        // 处理点号按键
+      } else if (event.key === '"') {
+        // 处理双引号按键
+      } else if (event.key === "'") {
+        // 处理单引号按键
+      } else if (event.key === '/') {
+        // 处理斜杠按键
+      } else if (event.key === '=') {
+        // 处理等号按键
+      } else if (event.key === '>') {
+        // 处理大于号按键
+      }
+    }
+  }
+}
+</script>
+```

@@ -101,3 +101,72 @@ export default (props, { attrs, slots, emit, expose }) => {
   return h('div', attrs, slots.default ? slots.default() : [])
 }
 ```
+
+## 迁移规则4：h 函数需要全局导入
+
+- Vue2: h 函数作为 render 函数的第一个参数传入
+- Vue3: 需要从 'vue' 显式导入 h 函数
+
+### 代码示例
+
+```javascript
+// Vue2 写法
+export default {
+  functional: true,
+  render(h, { props }) {
+    return h('div', props.text)
+  }
+}
+
+// Vue3 写法
+import { h } from 'vue'
+
+const MyComponent = (props) => {
+  return h('div', props.text)
+}
+
+export default MyComponent
+```
+
+## 迁移规则5：SFC 中 props 需要改为 $props
+
+- Vue2: 函数式模板中直接使用 props
+- Vue3: 改为使用 $props
+
+### 代码示例
+
+```html
+<!-- Vue2 写法 -->
+<template functional>
+  <div>{{ props.text }}</div>
+</template>
+
+<!-- Vue3 写法 -->
+<template>
+  <div>{{ $props.text }}</div>
+</template>
+```
+
+## 迁移规则6：listeners 已合并到 $attrs 中
+
+- Vue2: 使用 v-bind="attrs" v-on="listeners"
+- Vue3: listeners 已合并到 $attrs，可以删除
+
+### 代码示例
+
+```html
+<!-- Vue2 写法 -->
+<template functional>
+  <component
+    v-bind="attrs"
+    v-on="listeners"
+  />
+</template>
+
+<!-- Vue3 写法 -->
+<template>
+  <component
+    v-bind="$attrs"
+  />
+</template>
+```

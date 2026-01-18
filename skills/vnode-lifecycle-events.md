@@ -64,3 +64,26 @@ export default {
 <!-- Vue3 写法 -->
 <child-component @vue:beforeUnmount="onBeforeUnmount" />
 ```
+
+## 迁移规则3：生命周期事件也可用于 HTML 元素
+
+- Vue2: 生命周期事件只能用于组件
+- Vue3: 生命周期事件也可用于 HTML 元素，和组件上的用法一样
+
+### 代码示例
+
+```html
+<!-- Vue2 写法 -->
+<template>
+  <child-component @hook:updated="onUpdated">
+</template>
+
+<!-- Vue3 写法 -->
+<template>
+  <!-- 组件上使用 -->
+  <child-component @vue:updated="onUpdated" />
+
+  <!-- HTML 元素上也可以使用 -->
+  <div @vue:updated="onUpdated" />
+</template>
+```

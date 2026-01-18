@@ -225,3 +225,32 @@ new Vue({
 const app = createApp({})
 app.provide('guide', 'Vue 3 Guide')
 ```
+
+## 迁移规则11：Vue.mixin 替换为 app.mixin
+
+- Vue2: 使用 Vue.mixin 注册全局 mixin
+- Vue3: 使用 app.mixin 注册应用级 mixin
+
+### 代码示例
+
+```javascript
+// Vue2 写法
+Vue.mixin({
+  created() {
+    console.log('Global mixin created')
+  }
+})
+
+const app = new Vue({
+  el: '#app'
+})
+
+// Vue3 写法
+const app = createApp({})
+app.mixin({
+  created() {
+    console.log('Global mixin created')
+  }
+})
+app.mount('#app')
+```

@@ -64,3 +64,51 @@ description: 过渡 class 名称更改，v-enter 改为 v-enter-from，v-leave �
   <div v-if="show">Hello</div>
 </transition>
 ```
+
+## 迁移规则3：渲染函数中使用 leaveFromClass 和 enterFromClass
+
+- Vue2: 使用 props 中的 'leave-class' 和 'enter-class'
+- Vue3: 使用 leaveFromClass 和 enterFromClass
+
+### 代码示例
+
+```javascript
+// Vue2 写法
+import { h } from 'vue'
+import { Transition } from 'vue'
+
+h(Transition, {
+  props: {
+    'leave-class': 'leave-active',
+    'enter-class': 'enter-active'
+  }
+})
+
+// Vue3 写法
+import { h } from 'vue'
+import { Transition } from 'vue'
+
+h(Transition, {
+  leaveFromClass: 'leave-from',
+  enterFromClass: 'enter-from'
+})
+```
+
+## 迁移规则4：JSX 中使用 leaveFromClass 和 enterFromClass
+
+- Vue2: JSX 中使用 leaveClass 和 enterClass
+- Vue3: JSX 中使用 leaveFromClass 和 enterFromClass
+
+### 代码示例
+
+```jsx
+// Vue2 写法
+<Transition leaveClass="leave-active" enterClass="enter-active">
+  ...
+</Transition>
+
+// Vue3 写法
+<Transition leaveFromClass="leave-from" enterFromClass="enter-from">
+  ...
+</Transition>
+```

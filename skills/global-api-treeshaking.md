@@ -107,3 +107,58 @@ nextTick(() => {})
 reactive({ count: 0 })
 console.log(version)
 ```
+
+## 迁移规则5：内部帮助器具名导出
+
+- Vue2: 内部组件和帮助器打包时会全部引入
+- Vue3: 内部帮助器具名导出，支持 tree-shaking
+
+### 代码示例
+
+```html
+<!-- 编译结果示例 -->
+<!-- Vue2 写法 -->
+<transition>
+  <div v-show="ok">hello</div>
+</transition>
+
+<!-- 编译为 -->
+import Vue from 'vue'
+export function render() {
+  return Vue.h('transition', [Vue.h('div', { directives: [{ name: 'show', value: this.ok }] }, 'hello')])
+}
+
+<!-- Vue3 写法 -->
+<transition>
+  <div v-show="ok">hello</div>
+</transition>
+
+<!-- 编译为 -->
+import { h, Transition, withDirectives, vShow } from 'vue'
+export function render() {
+  return h(Transition, [withDirectives(h('div', 'hello'), [[vShow, this.ok]])])
+}
+```
+
+## 迁移规则6：插件打包工具配置
+
+- Vue2: 插件依赖全局 API
+- Vue3: 插件必须配置 externals/external 避免 Vue 源代码打包到插件中
+
+### 代码示例
+
+```javascript
+// webpack 配置
+// webpack.config.js
+module.exports = {
+  externals: {
+    vue: 'Vue'
+  }
+}
+
+// Rollup 配置
+// rollup.config.js
+export default {
+  external: ['vue']
+}
+```

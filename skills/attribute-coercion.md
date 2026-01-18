@@ -75,3 +75,27 @@ description: attribute 强制行为变化，移除枚举概念，false 值改为
 <!-- 要保持原有行为，显式使用 false -->
 <div :contenteditable="false">content</div>
 ```
+
+## 迁移规则4：spellcheck 行为
+
+- Vue2: spellcheck null 值会被强制转换为 'true'
+- Vue3: 需要显式指定 true 或 'true'
+
+### 代码示例
+
+```html
+<!-- Vue2 写法 -->
+<div :spellcheck="null">content</div>
+<!-- 结果：<div spellcheck="true">content</div> -->
+
+<!-- Vue3 写法 -->
+<div :spellcheck="true">content</div>
+<!-- 结果：<div spellcheck="true">content</div> -->
+
+<div :spellcheck="'true'">content</div>
+<!-- 结果：<div spellcheck="true">content</div> -->
+
+<!-- 要禁用拼写检查 -->
+<div :spellcheck="false">content</div>
+<!-- 结果：<div spellcheck="false">content</div> -->
+```

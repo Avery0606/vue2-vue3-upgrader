@@ -70,3 +70,24 @@ description: key attribute 变化，v-if/v-else 分支自动生成 key，v-for �
   <span>...</span>
 </template>
 ```
+
+## 迁移规则4：template v-for 子节点存在 v-if 时的 key 位置
+
+- Vue2: key 可以放在子节点上
+- Vue3: 当使用 `<template v-for>` 时如果存在使用 `v-if` 的子节点，则 `key` 应改为设置在 `<template>` 标签上
+
+### 代码示例
+
+```html
+<!-- Vue2 写法 -->
+<template v-for="item in list">
+  <div v-if="item.isVisible" :key="item.id">...</div>
+  <span v-else :key="item.id">...</span>
+</template>
+
+<!-- Vue3 写法 -->
+<template v-for="item in list" :key="item.id">
+  <div v-if="item.isVisible">...</div>
+  <span v-else>...</span>
+</template>
+```

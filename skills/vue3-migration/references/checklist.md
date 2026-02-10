@@ -1,41 +1,41 @@
-# Vue3 Migration Checklist
+# Vue3 迁移清单
 
-Based on official Vue.js 3 Migration Guide: https://v3-migration.vuejs.org/zh/breaking-changes/
+基于官方 Vue.js 3 迁移指南：https://v3-migration.vuejs.org/zh/breaking-changes/
 
-## 1. Global API Changes
+## 1. 全局 API 变更
 
-### 1.1 createApp (Critical)
+### 1.1 createApp（关键）
 
 ```javascript
 // Vue 2
-const app = new Vue({ /* root options */ })
+const app = new Vue({ /* 根选项 */ })
 
 // Vue 3
 import { createApp } from 'vue'
-const app = createApp({ /* root options */ })
+const app = createApp({ /* 根选项 */ })
 ```
 
-### 1.2 Component Registration
+### 1.2 组件注册
 
 ```javascript
 // Vue 2
-Vue.component('my-component', { /* options */ })
+Vue.component('my-component', { /* 选项 */ })
 
 // Vue 3
-app.component('my-component', { /* options */ })
+app.component('my-component', { /* 选项 */ })
 ```
 
-### 1.3 Directive Registration
+### 1.3 指令注册
 
 ```javascript
 // Vue 2
-Vue.directive('my-directive', { /* options */ })
+Vue.directive('my-directive', { /* 选项 */ })
 
 // Vue 3
-app.directive('my-directive', { /* options */ })
+app.directive('my-directive', { /* 选项 */ })
 ```
 
-### 1.4 Plugin Installation
+### 1.4 插件安装
 
 ```javascript
 // Vue 2
@@ -49,10 +49,10 @@ app.use(router)
 
 ```javascript
 // Vue 2
-Vue.mixin({ /* options */ })
+Vue.mixin({ /* 选项 */ })
 
 // Vue 3
-app.mixin({ /* options */ })
+app.mixin({ /* 选项 */ })
 ```
 
 ### 1.6 Prototype
@@ -85,23 +85,23 @@ app.$mount('#app')
 app.mount('#app')
 ```
 
-### 1.9 Vue.extend REMOVED
+### 1.9 Vue.extend 已移除
 
 ```javascript
 // Vue 2
-const Component = Vue.extend({ /* options */ })
+const Component = Vue.extend({ /* 选项 */ })
 
-// Vue 3 - Use defineComponent
+// Vue 3 - 使用 defineComponent
 import { defineComponent } from 'vue'
-const Component = defineComponent({ /* options */ })
+const Component = defineComponent({ /* 选项 */ })
 
-// Or just use options directly with createApp
+// 或直接在 createApp 中使用选项
 ```
 
-### 1.10 Global Properties
+### 1.10 全局属性
 
 ```javascript
-// Vue 2 - provide on root
+// Vue 2 - 在根组件上提供
 new Vue({
   provide: { userName: 'John' }
 })
@@ -112,26 +112,26 @@ app.provide('userName', 'John')
 
 ---
 
-## 2. v-model Changes
+## 2. v-model 变更
 
-### 2.1 Basic v-model
+### 2.1 基础 v-model
 
 ```html
 <!-- Vue 2 -->
 <ChildComponent v-model="pageTitle" />
-<!-- Same as -->
+<!-- 等同于 -->
 <ChildComponent :value="pageTitle" @input="pageTitle = $event" />
 
 <!-- Vue 3 -->
 <ChildComponent v-model="pageTitle" />
-<!-- Same as -->
+<!-- 等同于 -->
 <ChildComponent :modelValue="pageTitle" @update:modelValue="pageTitle = $event" />
 ```
 
-### 2.2 Component Changes
+### 2.2 组件变更
 
 ```javascript
-// Child component - Vue 2
+// 子组件 - Vue 2
 export default {
   props: ['value'],
   model: {
@@ -140,14 +140,14 @@ export default {
   }
 }
 
-// Child component - Vue 3
+// 子组件 - Vue 3
 export default {
   props: ['modelValue'],
   emits: ['update:modelValue']
 }
 ```
 
-### 2.3 .sync Replacement
+### 2.3 .sync 替换
 
 ```html
 <!-- Vue 2 -->
@@ -157,40 +157,40 @@ export default {
 <ChildComponent v-model:title="pageTitle" />
 ```
 
-### 2.4 Multiple v-model
+### 2.4 多个 v-model
 
 ```html
-<!-- Vue 3 supports multiple v-model -->
+<!-- Vue 3 支持多个 v-model -->
 <ChildComponent
   v-model:title="pageTitle"
   v-model:content="pageContent"
 />
 ```
 
-### 2.5 v-model Modifiers
+### 2.5 v-model 修饰符
 
 ```html
-<!-- Custom modifiers supported in Vue 3 -->
+<!-- Vue 3 支持自定义修饰符 -->
 <ChildComponent v-model.capitalize="text" />
 ```
 
 ---
 
-## 3. Events API Removal
+## 3. 事件 API 移除
 
-### 3.1 $on/$off/$once REMOVED
+### 3.1 $on/$off/$once 已移除
 
 ```javascript
-// Vue 2 - REMOVED
+// Vue 2 - 已移除
 this.$on('event', handler)
 this.$off('event', handler)
 this.$once('event', handler)
 ```
 
-### 3.2 Event Bus Replacement
+### 3.2 事件总线替换
 
 ```javascript
-// Using mitt
+// 使用 mitt
 import mitt from 'mitt'
 const emitter = mitt()
 
@@ -200,7 +200,7 @@ const emitter = mitt()
 ```
 
 ```javascript
-// Using tiny-emitter
+// 使用 tiny-emitter
 import tinyEmitter from 'tiny-emitter/instance'
 
 export default {
@@ -211,7 +211,7 @@ export default {
 }
 ```
 
-### 3.3 Root Component Events
+### 3.3 根组件事件
 
 ```javascript
 // Vue 3
@@ -224,7 +224,7 @@ createApp(App, {
 
 ---
 
-## 4. v-on.native Removed
+## 4. v-on.native 已移除
 
 ```html
 <!-- Vue 2 -->
@@ -234,13 +234,13 @@ createApp(App, {
 <ChildComponent @click="handleClick" />
 ```
 
-**Note:** Child component must declare the event in `emits` option.
+**注意：** 子组件必须在 `emits` 选项中声明该事件。
 
 ---
 
-## 5. Emits Option
+## 5. Emits 选项
 
-### 5.1 Basic Usage
+### 5.1 基础用法
 
 ```javascript
 export default {
@@ -248,7 +248,7 @@ export default {
 }
 ```
 
-### 5.2 With Validation
+### 5.2 带验证
 
 ```javascript
 export default {
@@ -259,15 +259,15 @@ export default {
 }
 ```
 
-### 5.3 Why Important
+### 5.3 为什么重要
 
-Without emits, events are fallthrough to $attrs and cause duplicate events.
+如果没有 emits，事件会穿透到 $attrs 并导致重复事件。
 
 ---
 
-## 6. Lifecycle Hooks
+## 6. 生命周期钩子
 
-### 6.1 Renamed
+### 6.1 重命名
 
 ```javascript
 // Vue 2 → Vue 3
@@ -276,22 +276,22 @@ destroyed → unmounted
 ```
 
 ```javascript
-// Before
+// 之前
 beforeDestroy() {
-  // cleanup
+  // 清理
 }
 
-// After
+// 之后
 beforeUnmount() {
-  // cleanup
+  // 清理
 }
 ```
 
 ---
 
-## 7. Filters REMOVED
+## 7. 过滤器已移除
 
-### 7.1 Filter Definition
+### 7.1 过滤器定义
 
 ```javascript
 // Vue 2
@@ -303,10 +303,10 @@ export default {
   }
 }
 
-// Vue 3 - REMOVED
+// Vue 3 - 已移除
 ```
 
-### 7.2 Replacement - Method
+### 7.2 替换为方法
 
 ```javascript
 export default {
@@ -318,7 +318,7 @@ export default {
 }
 ```
 
-### 7.3 Replacement - Computed
+### 7.3 替换为计算属性
 
 ```javascript
 export default {
@@ -331,7 +331,7 @@ export default {
 }
 ```
 
-### 7.4 Template Usage
+### 7.4 模板使用
 
 ```html
 <!-- Vue 2 -->
@@ -339,11 +339,11 @@ export default {
 
 <!-- Vue 3 -->
 {{ currencyUSD(price) }}
-<!-- or -->
+<!-- 或 -->
 {{ formattedPrice }}
 ```
 
-### 7.5 Global Filters
+### 7.5 全局过滤器
 
 ```javascript
 // main.js - Vue 3
@@ -355,54 +355,54 @@ app.config.globalProperties.$filters = {
 ```
 
 ```html
-<!-- Template usage -->
+<!-- 模板使用 -->
 {{ $filters.currencyUSD(price) }}
 ```
 
 ---
 
-## 8. Custom Directives
+## 8. 自定义指令
 
-### 8.1 Hook Mapping
+### 8.1 钩子映射
 
-| Vue 2 | Vue 3 | Description |
-|-------|-------|-------------|
-| bind | beforeMount | When directive attaches |
-| inserted | mounted | Element inserted in DOM |
-| update | REMOVED | Use updated |
-| componentUpdated | updated | After component update |
-| unbind | unmounted | Directive removes |
+| Vue 2 | Vue 3 | 描述 |
+|-------|-------|------------|
+| bind | beforeMount | 指令附着时 |
+| inserted | mounted | 元素插入 DOM 时 |
+| update | 已移除 | 使用 updated |
+| componentUpdated | updated | 组件更新后 |
+| unbind | unmounted | 指令移除时 |
 
-### 8.2 New Hooks
+### 8.2 新钩子
 
 ```javascript
 export default {
   created(el, binding, vnode) {
-    // New! Before attributes applied
+    // 新！属性应用之前
   },
   beforeMount() {
-    // New! Before element mounted
+    // 新！元素挂载之前
   },
   mounted() {},
   beforeUpdate() {
-    // New! Before element updates
+    // 新！元素更新之前
   },
   updated() {},
   beforeUnmount() {
-    // New! Before element unmounts
+    // 新！元素卸载之前
   },
   unmounted() {}
 }
 ```
 
-### 8.3 binding.expression REMOVED
+### 8.3 binding.expression 已移除
 
 ```javascript
 // Vue 2
 directives: {
   highlight: {
     bind(el, binding, vnode) {
-      console.log(binding.expression) // REMOVED
+      console.log(binding.expression) // 已移除
     }
   }
 }
@@ -410,12 +410,12 @@ directives: {
 // Vue 3
 directives: {
   highlight(el, binding, vnode) {
-    console.log(binding.value) // Use this instead
+    console.log(binding.value) // 使用这个
   }
 }
 ```
 
-### 8.4 Component Instance Access
+### 8.4 组件实例访问
 
 ```javascript
 // Vue 2
@@ -431,9 +431,9 @@ mounted(el, binding, vnode) {
 
 ---
 
-## 9. Async Components
+## 9. 异步组件
 
-### 9.1 Basic
+### 9.1 基础
 
 ```javascript
 // Vue 2
@@ -444,7 +444,7 @@ import { defineAsyncComponent } from 'vue'
 const AsyncComponent = defineAsyncComponent(() => import('./Component.vue'))
 ```
 
-### 9.2 With Options
+### 9.2 带选项
 
 ```javascript
 // Vue 2
@@ -466,13 +466,13 @@ const AsyncComponent = defineAsyncComponent({
 })
 ```
 
-**Note:** `component` → `loader`
+**注意：** `component` → `loader`
 
 ---
 
-## 10. Functional Components
+## 10. 函数式组件
 
-### 10.1 Completely Rewritten
+### 10.1 完全重写
 
 ```javascript
 // Vue 2
@@ -484,15 +484,15 @@ export default {
   }
 }
 
-// Vue 3 - Must be stateful
+// Vue 3 - 必须是有状态组件
 export default {
   props: ['level'],
   template: `<h{{ level }}><slot /></h{{ level }}>`
-  // or use render function with imported h
+  // 或使用导入的 h 的 render 函数
 }
 ```
 
-### 10.2 Template Functional Removed
+### 10.2 模板函数式已移除
 
 ```html
 <!-- Vue 2 -->
@@ -500,7 +500,7 @@ export default {
   <component :is="`h${props.level}`" v-bind="attrs" v-on="listeners" />
 </template>
 
-<!-- Vue 3 - Remove functional attribute -->
+<!-- Vue 3 - 移除 functional 属性 -->
 <template>
   <component :is="`h${$props.level}`" v-bind="$attrs" />
 </template>
@@ -508,9 +508,9 @@ export default {
 
 ---
 
-## 11. Slots
+## 11. 插槽
 
-### 11.1 $scopedSlots Removed
+### 11.1 $scopedSlots 已移除
 
 ```javascript
 // Vue 2
@@ -520,7 +520,7 @@ this.$scopedSlots.header
 this.$slots.header()
 ```
 
-### 11.2 All Slots as Functions
+### 11.2 所有插槽作为函数
 
 ```javascript
 // Vue 2
@@ -532,7 +532,7 @@ this.$slots.default()
 this.$slots.footer()
 ```
 
-### 11.3 Render Function Syntax
+### 11.3 Render 函数语法
 
 ```javascript
 // Vue 2
@@ -548,17 +548,17 @@ h(LayoutComponent, {
 
 ---
 
-## 12. $listeners Removed
+## 12. $listeners 已移除
 
 ```javascript
 // Vue 2
 this.$listeners
 
-// Vue 3 - Merged into $attrs
-this.$attrs  // Now includes onClick, etc.
+// Vue 3 - 合并到 $attrs
+this.$attrs  // 现在包含 onClick 等
 ```
 
-**Template change:**
+**模板变更：**
 
 ```html
 <!-- Vue 2 -->
@@ -570,69 +570,69 @@ this.$attrs  // Now includes onClick, etc.
 
 ---
 
-## 13. $attrs Includes class & style
+## 13. $attrs 包含 class 和 style
 
-### 13.1 Before
+### 13.1 之前
 
 ```javascript
-// Vue 2 - $attrs excludes class and style
+// Vue 2 - $attrs 排除 class 和 style
 this.$attrs  // { id: 'my-id' }
 ```
 
-### 13.2 After
+### 13.2 之后
 
 ```javascript
-// Vue 3 - $attrs includes everything
+// Vue 3 - $attrs 包含所有内容
 this.$attrs  // { id: 'my-id', class: 'my-class', style: 'color: red' }
 ```
 
 ---
 
-## 14. Data Option
+## 14. Data 选项
 
-### 14.1 Must Be Function
+### 14.1 必须是函数
 
 ```javascript
-// Vue 2 - Object allowed for root
+// Vue 2 - 根组件允许对象
 data: { count: 0 }
 
-// Vue 3 - Function required for ALL
+// Vue 3 - 所有组件都必须用函数
 data() {
   return { count: 0 }
 }
 ```
 
-### 14.2 Mixin Shallow Merge
+### 14.2 Mixin 浅合并
 
 ```javascript
-// Vue 2 - Deep merge
-// Result: { user: { id: 2, name: 'Jack' } }
+// Vue 2 - 深度合并
+// 结果: { user: { id: 2, name: 'Jack' } }
 
-// Vue 3 - Shallow merge
-// Result: { user: { id: 2 } }
+// Vue 3 - 浅合并
+// 结果: { user: { id: 2 } }
 ```
 
 ---
 
-## 15. Watch Array
+## 15. Watch 数组
 
-### 15.1 Behavior Change
+### 15.1 行为变更
 
 ```javascript
-// Vue 2 - Triggers on mutation
+// Vue 2 - 变更时触发
 watch: {
-  list() { /* triggers */ }
+  list() { /* 触发 */ }
 }
 
-// Vue 3 - Only triggers on replacement
+// Vue 3 - 仅替换时触发
 watch: {
-  list() { /* won't trigger on mutation */ }
+  list() { /* 变更时不会触发 */ }
 }
 
-// Add deep option
+// 添加 deep 选项
 watch: {
   list: {
-    handler() { /* triggers */ },
+    handler() { /* 触发 */ },
     deep: true
   }
 }
@@ -640,9 +640,9 @@ watch: {
 
 ---
 
-## 16. Transition Classes
+## 16. 过渡类
 
-### 16.1 Renamed
+### 16.1 重命名
 
 ```css
 /* Vue 2 */
@@ -654,7 +654,7 @@ watch: {
 .v-leave-to { opacity: 0; }
 ```
 
-### 16.2 Props Renamed
+### 16.2 Props 重命名
 
 ```javascript
 // Vue 2
@@ -668,7 +668,7 @@ enter-from-class: 'my-enter'
 
 ---
 
-## 17. Template Key Attribute
+## 17. 模板 Key 属性
 
 ### 17.1 template v-for
 
@@ -691,41 +691,41 @@ enter-from-class: 'my-enter'
 <div v-if="condition" key="yes">Yes</div>
 <div v-else key="no">No</div>
 
-<!-- Vue 3 - key optional, auto-generated -->
+<!-- Vue 3 - key 可选，自动生成 -->
 <div v-if="condition">Yes</div>
 <div v-else>No</div>
 ```
 
 ---
 
-## 18. v-if/v-for Priority
+## 18. v-if/v-for 优先级
 
 ```html
-<!-- Vue 2 - v-for has priority -->
+<!-- Vue 2 - v-for 优先 -->
 <div v-for="item in items" v-if="item.visible">...</div>
 
-<!-- Vue 3 - v-if has priority -->
+<!-- Vue 3 - v-if 优先 -->
 
-<!-- Best practice - use computed -->
+<!-- 最佳实践 - 使用计算属性 -->
 <div v-for="item in visibleItems">...</div>
 ```
 
 ---
 
-## 19. v-bind Order
+## 19. v-bind 顺序
 
 ```html
-<!-- Order matters in Vue 3 -->
+<!-- Vue 3 中顺序很重要 -->
 <div id="red" v-bind="{ id: 'blue' }"></div>
-<!-- Result: id="blue" (v-bind wins) -->
+<!-- 结果: id="blue"（v-bind 获胜） -->
 
 <div v-bind="{ id: 'blue' }" id="red"></div>
-<!-- Result: id="red" (static wins) -->
+<!-- 结果: id="red"（静态获胜） -->
 ```
 
 ---
 
-## 20. Custom Elements Interop
+## 20. 自定义元素互操作性
 
 ### 20.1 config.ignoredElements
 
@@ -733,7 +733,7 @@ enter-from-class: 'my-enter'
 // Vue 2
 Vue.config.ignoredElements = ['plastic-button']
 
-// Vue 3 - Compiler option
+// Vue 3 - 编译器选项
 // webpack vue-loader
 {
   test: /\.vue$/,
@@ -746,23 +746,23 @@ Vue.config.ignoredElements = ['plastic-button']
 }
 ```
 
-### 20.2 is Attribute
+### 20.2 is 属性
 
 ```html
-<!-- Vue 2 - Interpreted as Vue component -->
+<!-- Vue 2 - 解释为 Vue 组件 -->
 <button is="plastic-button">Click</button>
 
 <!-- Vue 3 -->
-<!-- For Vue component -->
+<!-- 对于 Vue 组件 -->
 <component is="bar" />
-<!-- For native custom element -->
+<!-- 对于原生自定义元素 -->
 <button is="plastic-button">Click</button>
 ```
 
-### 20.3 vue: Prefix
+### 20.3 vue: 前缀
 
 ```html
-<!-- For DOM template component usage -->
+<!-- 用于 DOM 模板组件使用 -->
 <table>
   <tr is="vue:blog-post-row"></tr>
 </table>
@@ -770,55 +770,55 @@ Vue.config.ignoredElements = ['plastic-button']
 
 ---
 
-## 21. Transition Group Root
+## 21. 过渡组根元素
 
-### 21.1 No Default Root
+### 21.1 没有默认根元素
 
 ```html
-<!-- Vue 2 - Has span root -->
+<!-- Vue 2 - 有 span 根元素 -->
 <transition-group>
   <li v-for="item in items" :key="item">{{ item }}</li>
 </transition-group>
-<!-- Renders: <span><li>...</li><li>...</li></span> -->
+<!-- 渲染为: <span><li>...</li><li>...</li></span> -->
 
-<!-- Vue 3 - No root -->
+<!-- Vue 3 - 没有根元素 -->
 <transition-group tag="span">
-  <!-- or no tag attribute -->
+  <!-- 或没有 tag 属性 -->
   <li v-for="item in items" :key="item">{{ item }}</li>
 </transition-group>
 ```
 
 ---
 
-## 22. Mount Changes
+## 22. 挂载变更
 
 ```javascript
-// Vue 2 - Replaces element
+// Vue 2 - 替换元素
 const app = new Vue({ template: '<div>App</div>' })
 app.$mount('#app')
-<!-- If #app has content, it's replaced -->
+<!-- 如果 #app 有内容，会被替换 -->
 
-// Vue 3 - Appends as child
+// Vue 3 - 追加为子元素
 const app = createApp({ template: '<div>App</div>' })
 app.mount('#app')
-<!-- #app's innerHTML is replaced -->
+<!-- #app 的 innerHTML 被替换 -->
 ```
 
 ---
 
-## 23. KeyCode Modifiers
+## 23. KeyCode 修饰符
 
-### 23.1 Removed
+### 23.1 已移除
 
 ```html
 <!-- Vue 2 - KeyCode -->
 <input @keyup.13="submit" />
 
-<!-- Vue 3 - Use key names -->
+<!-- Vue 3 - 使用按键名称 -->
 <input @keyup.enter="submit" />
 ```
 
-### 23.2 config.keyCodes REMOVED
+### 23.2 config.keyCodes 已移除
 
 ```javascript
 // Vue 2
@@ -826,10 +826,10 @@ Vue.config.keyCodes = {
   f1: 112
 }
 
-// Vue 3 - REMOVED
+// Vue 3 - 已移除
 ```
 
-### 23.3 Supported Keys
+### 23.3 支持的按键
 
 ```html
 <input @keyup.page-down="nextPage" />
@@ -838,9 +838,9 @@ Vue.config.keyCodes = {
 
 ---
 
-## 24. Global API Tree-shaking
+## 24. 全局 API 树摇
 
-### 24.1 Named Exports
+### 24.1 命名导出
 
 ```javascript
 // Vue 2
@@ -855,7 +855,7 @@ reactive({})
 version
 ```
 
-### 24.2 Affected APIs
+### 24.2 受影响的 API
 
 | Vue 2 | Vue 3 |
 |-------|-------|
@@ -863,19 +863,19 @@ version
 | Vue.observable | reactive |
 | Vue.version | version |
 | Vue.compile | import { compile } from 'vue' |
-| Vue.set | REMOVED (not needed) |
-| Vue.delete | REMOVED (not needed) |
+| Vue.set | 已移除（不需要） |
+| Vue.delete | 已移除（不需要） |
 
 ---
 
-## 25. Props Default Factory
+## 25. Props 默认工厂
 
 ```javascript
 // Vue 2
 props: {
   theme: {
     default(props) {
-      return this.theme  // Has access to this
+      return this.theme  // 可以访问 this
     }
   }
 }
@@ -885,8 +885,8 @@ import { inject } from 'vue'
 props: {
   theme: {
     default(props) {
-      return props.theme  // props parameter
-      // or use inject('theme', 'default')
+      return props.theme  // props 参数
+      // 或使用 inject('theme', 'default')
     }
   }
 }
@@ -894,19 +894,19 @@ props: {
 
 ---
 
-## 26. Render Function API
+## 26. Render 函数 API
 
-### 26.1 h Import
+### 26.1 h 导入
 
 ```javascript
-// Vue 2 - h passed as parameter
+// Vue 2 - h 作为参数传递
 export default {
   render(h) {
     return h('div')
   }
 }
 
-// Vue 3 - h imported
+// Vue 3 - 导入 h
 import { h } from 'vue'
 export default {
   render() {
@@ -915,7 +915,7 @@ export default {
 }
 ```
 
-### 26.2 VNode Props Flattened
+### 26.2 VNode Props 扁平化
 
 ```javascript
 // Vue 2
@@ -939,15 +939,15 @@ export default {
 }
 ```
 
-### 26.3 Resolve Component
+### 26.3 解析组件
 
 ```javascript
-// Vue 2 - String works
+// Vue 2 - 字符串可用
 render(h) {
   return h('my-component')
 }
 
-// Vue 3 - Must use resolveComponent
+// Vue 3 - 必须使用 resolveComponent
 import { h, resolveComponent } from 'vue'
 render() {
   const MyComponent = resolveComponent('my-component')
@@ -957,23 +957,23 @@ render() {
 
 ---
 
-## Summary Table
+## 总结表
 
-| Category | Vue 2 | Vue 3 | Priority |
+| 类别 | Vue 2 | Vue 3 | 优先级 |
 |----------|-------|-------|----------|
-| Global API | Vue.component | app.component | Critical |
-| v-model | value/input | modelValue/update:modelValue | Critical |
-| Lifecycle | beforeDestroy | beforeUnmount | Critical |
-| Filters | {{ \| filter }} | methods/computed | Critical |
-| Events | $on/$off/$once | mitt/tiny-emitter | Critical |
-| .sync | :prop.sync | v-model:prop | High |
-| Directives | bind/inserted | beforeMount/mounted | High |
-| Async | component option | loader option | High |
-| Functional | functional: true | stateful only | High |
-| .native | @click.native | @click | High |
-| $scopedSlots | this.$scopedSlots | this.$slots() | Medium |
-| $listeners | Separate | In $attrs | Medium |
-| Data | Object or function | Function only | Medium |
-| Watch | Mutation triggers | Replacement only | Medium |
-| Transitions | .v-enter | .v-enter-from | Low |
-| Key | On children | On template | Low |
+| 全局 API | Vue.component | app.component | 关键 |
+| v-model | value/input | modelValue/update:modelValue | 关键 |
+| 生命周期 | beforeDestroy | beforeUnmount | 关键 |
+| 过滤器 | {{ | filter }} | methods/computed | 关键 |
+| 事件 | $on/$off/$once | mitt/tiny-emitter | 关键 |
+| .sync | :prop.sync | v-model:prop | 高 |
+| 指令 | bind/inserted | beforeMount/mounted | 高 |
+| 异步 | component 选项 | loader 选项 | 高 |
+| 函数式 | functional: true | 仅限有状态 | 高 |
+| .native | @click.native | @click | 高 |
+| $scopedSlots | this.$scopedSlots | this.$slots() | 中等 |
+| $listeners | 独立 | 在 $attrs 中 | 中等 |
+| Data | 对象或函数 | 仅函数 | 中等 |
+| Watch | 变更触发 | 仅替换触发 | 中等 |
+| 过渡 | .v-enter | .v-enter-from | 低 |
+| Key | 在子元素上 | 在模板上 | 低 |
